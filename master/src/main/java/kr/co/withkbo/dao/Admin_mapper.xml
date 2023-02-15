@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.AdminDAO">
+<!-- 	<sql id="RowNum"> -->
+<!-- 		row_number() over(order by u.userLevel) as RowNum -->
+<!-- 	</sql> -->
+
+	<select id="sup_list" resultType="kr.co.withkbo.dto.AdminDTO">
+		select u.userId ,u.nickname,u.emailValid,u.sanctionNo ,u.email,u.userLevel,us.userId ,us.status,us.updateDate  
+		from `user` u ,user_status us where u.userId =us.userId order by u.userLevel
+	</select>
+
+	<select id="list" resultType="kr.co.withkbo.dto.AdminDTO">
+		select row_number() over(order by u.userLevel) as RowNum,u.userId ,u.nickname,u.emailValid,u.sanctionNo ,u.email,u.userLevel,us.userId ,us.status,us.updateDate  
+		from `user` u ,user_status us where u.userId =us.userId order by u.userLevel limit 10 offset #{param1}
+	</select>
+	
+	<select id="size" resultType="int">
+		select count(userId) from user
+	</select>
+
+
+	<select id="status" resultType="kr.co.withkbo.dto.AdminDTO">
+		select status,updateDate from
+		user_status where userId=#{param1}
+	</select>
+
+
+	<select id="totalCount" resultType="int">
+		select count(*) from user 
+	</select>
+	
+	<update id="change_status">
+		update user set userLevel=#{param1} where userId=#{param2}
+	</update>
+	
+	<select id="sup_search_user" resultType="kr.co.withkbo.dto.AdminDTO">
+		select row_number() over(order by u.userLevel) as RowNum,u.userId ,u.nickname ,u.email,u.userLevel,us.userId ,us.status,us.updateDate  
+		from `user` u ,user_status us where u.userId =us.userId
+		<if test="param1.equals('all') and param2.equals('userId') and !param3.isEmpty()">
+			and u.userId=#{param3}
+		</if>
+		<if test="param1.equals('all') and param2.equals('email') and !param3.isEmpty()">
+			and u.email=#{param3}
+		</if>
+		<if test="param1.equals('all') and param2.equals('nickname') and !param3.isEmpty()">
+			and u.nickname=#{param3}
+		</if>
+		
+		<if test="!param1.equals('all') and param2.equals('userId') and !param3.isEmpty()">
+			and us.status=#{param1} and u.userId=#{param3}
+		</if>
+		<if test="!param1.equals('all') and param2.equals('email') and !param3.isEmpty()">
+			and us.status=#{param1} and u.email=#{param3}
+		</if>
+		<if test="!param1.equals('all') and param2.equals('nickname') and !param3.isEmpty()">
+			and us.status=#{param1} and u.nickname=#{param3}
+		</if>
+		
+<!-- 		<if test="param1.equals('all') and !param2.isEmpty() and param3.isEmpty()"> -->
+<!-- 		</if> -->
+		
+		<if test="!param1.equals('all') and !param2.isEmpty() and param3.isEmpty()">
+			and us.status=#{param1}
+		</if>
+		order by u.userLevel
+	</select>
+	
+	<select id="search_user" resultType="kr.co.withkbo.dto.AdminDTO">
+		select row_number() over(order by u.userLevel) as RowNum,u.userId ,u.nickname ,u.email,u.userLevel,us.userId ,us.status,us.updateDate  
+		from `user` u ,user_status us where u.userId =us.userId
+		<if test="param1.equals('all') and param2.equals('userId') and !param3.isEmpty()">
+			and u.userId=#{param3}
+		</if>
+		<if test="param1.equals('all') and param2.equals('email') and !param3.isEmpty()">
+			and u.email=#{param3}
+		</if>
+		<if test="param1.equals('all') and param2.equals('nickname') and !param3.isEmpty()">
+			and u.nickname=#{param3}
+		</if>
+		
+		<if test="!param1.equals('all') and param2.equals('userId') and !param3.isEmpty()">
+			and us.status=#{param1} and u.userId=#{param3}
+		</if>
+		<if test="!param1.equals('all') and param2.equals('email') and !param3.isEmpty()">
+			and us.status=#{param1} and u.email=#{param3}
+		</if>
+		<if test="!param1.equals('all') and param2.equals('nickname') and !param3.isEmpty()">
+			and us.status=#{param1} and u.nickname=#{param3}
+		</if>
+		
+<!-- 		<if test="param1.equals('all') and !param2.isEmpty() and param3.isEmpty()"> -->
+<!-- 		</if> -->
+		
+		<if test="!param1.equals('all') and !param2.isEmpty() and param3.isEmpty()">
+			and us.status=#{param1}
+		</if>
+		order by u.userLevel limit 10 offset #{param4}
+	</select>
+	
+	<select id="user_total_search" resultType="int">
+		select count(u.userId) from `user` u ,user_status us where u.userId =us.userId
+		<if test="param1.equals('all') and param2.equals('userId') and !param3.isEmpty()">
+			and u.userId=#{param3}
+		</if>
+		<if test="param1.equals('all') and param2.equals('email') and !param3.isEmpty()">
+			and u.email=#{param3}
+		</if>
+		<if test="param1.equals('all') and param2.equals('nickname') and !param3.isEmpty()">
+			and u.nickname=#{param3}
+		</if>
+		
+		<if test="!param1.equals('all') and param2.equals('userId') and !param3.isEmpty()">
+			and us.status=#{param1} and u.userId=#{param3}
+		</if>
+		<if test="!param1.equals('all') and param2.equals('email') and !param3.isEmpty()">
+			and us.status=#{param1} and u.email=#{param3}
+		</if>
+		<if test="!param1.equals('all') and param2.equals('nickname') and !param3.isEmpty()">
+			and us.status=#{param1} and u.nickname=#{param3}
+		</if>
+		
+		<if test="param1.equals('all') and !param2.isEmpty() and param3.isEmpty()">
+		</if>
+		
+		<if test="!param1.equals('all') and !param2.isEmpty() and param3.isEmpty()">
+			and us.status=#{param1}
+		</if>
+	</select>
+	
+	<select id="detail_user" resultType="kr.co.withkbo.dto.AdminDTO">
+		select u.userId ,u.nickname,u.emailValid,u.sanctionNo,u.regDate
+			,u.email,u.userLevel,u.nickUpdateDate,us.userId ,us.status,us.updateDate  
+				from `user` u ,user_status us where u.userId =us.userId and u.userId=#{param1} order by u.userLevel 
+	</select>
+	
+	<select id="reportCount" resultType="int">
+		select count(*) from user u,report r where u.userId =r.userId and r.userId=#{param1};
+	</select>
+	
+	<select id="pointTotal" resultType="Integer" parameterType="String">
+		select 
+			sum(point) from point_event where userId=#{detail};
+	</select>
+
+	<select id="board_user" resultType="kr.co.withkbo.dto.AdminPostDTO">
+		select * from post p,category c where userId=#{param1} and p.categoryId =c.categoryId order by postId DESC limit 10 offset #{param2}
+	</select>
+	
+	<select id="board_search" resultType="kr.co.withkbo.dto.AdminPostDTO">
+<!-- 	select * from post p,category c where userId=#{param1}  -->
+<!-- 		and p.categoryId =c.categoryId order by postId DESC limit 10 offset #{param2} -->
+		select * from post p,category c
+		<if test="param1 == 1 and !param2.isEmpty()">
+			where postId=#{param2} and p.categoryId =c.categoryId and p.userId=#{param3}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			where subject like CONCAT('%',#{param2},'%') and p.categoryId =c.categoryId and p.userId=#{param3} 
+				order by postId DESC limit 10 offset #{param4}
+		</if>
+	</select>
+	
+	<select id="board_total_search" resultType="int">
+		select count(postId) from post p,category c
+		<if test="param1 == 1 and !param2.isEmpty()">
+			where postId=#{param2} and p.categoryId =c.categoryId and p.userId=#{param3}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			where subject like CONCAT('%',#{param2},'%') and p.categoryId =c.categoryId and p.userId=#{param3} 
+		</if>
+	</select>
+	
+	
+	<select id="board_total" resultType="int">
+		select count(postId) from post where userId=#{param1};
+	</select>
+	
+	<select id="comment_total" resultType="int">
+		select count(postId) from comment where userId=#{param1};
+	</select>
+	
+	<select id="comment_user" resultType="kr.co.withkbo.dto.AdminCommentDTO">
+		select * from comment where userId=#{param1} order by commentId DESC limit 10 offset #{param2}
+	</select>
+	
+	<select id="comment_search" resultType="kr.co.withkbo.dto.AdminCommentDTO">
+		select * from comment
+		<if test="param1 == 1 and !param2.isEmpty()">
+			where postId=#{param2} and userId=#{param3}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			where comContent like CONCAT('%',#{param2},'%') and userId=#{param3} 
+				order by commentId DESC limit 10 offset #{param4}
+		</if>
+		<if test="param1 == 3 and !param2.isEmpty()">
+			where commentId=#{param2} and userId=#{param3} 
+		</if>
+	</select>
+	
+	<select id="comment_total_search" resultType="int">
+		select count(commentId) from comment
+		<if test="param1 == 1 and !param2.isEmpty()">
+			where postId=#{param2} and userId=#{param3}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			where comContent like CONCAT('%',#{param2},'%') and userId=#{param3} 
+		</if>
+		<if test="param1 == 3 and !param2.isEmpty()">
+			where commentId=#{param2} and userId=#{param3} 
+		</if>
+	</select>
+	
+	
+	<select id="user_report_log" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where userId=#{param1} order by reportId DESC limit 10 offset #{param2}
+	</select>
+	
+	<select id="report_total" resultType="int">
+		select count(reportId) from report where userId=#{param1}
+	</select>
+	
+	<select id="user_report_search" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where
+		<if test="param1 == 1 and !param2.isEmpty()">
+			reportId=#{param2} and userId=#{param3}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			reason like CONCAT('%',#{param2},'%') and userId=#{param3} order by reportId DESC limit 10 offset #{param4}
+		</if>
+	</select>
+	
+	<select id="report_total_search" resultType="int">
+		select count(reportId) from report where
+		<if test="param1 == 1 and !param2.isEmpty()">
+			reportId=#{param2} and userId=#{param3}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			reason like CONCAT('%',#{param2},'%') and userId=#{param3} 
+		</if>
+	</select>
+	
+	
+	
+	
+
+</mapper>

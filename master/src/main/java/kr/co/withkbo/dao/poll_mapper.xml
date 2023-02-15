@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.PollDAO">
+	
+	<insert id="doPoll">
+		INSERT INTO poll_log(pollId,userId)
+			VALUES(#{param1},#{param2})
+	</insert>
+	
+	<select id="pollSel" resultType="String">
+			select pl.pollId from poll_log pl join poll p on p.pollId =pl.pollId 
+				where p.postId = #{param1} and userId =#{param2};
+	</select>
+	
+	<select id="pollChk" resultType="int">
+	select exists (select userId from poll_log pl where pollId in (
+		select pollId from poll where postId = 
+			(select postId from poll where pollId =#{param1})) and userId =#{param2});
+	</select>
+	
+	<select id="pollCount" resultType="int">
+		select count(pl.userId) from poll_log pl right join poll p on p.pollId =pl.pollId 
+			where p.postId =#{param1} group by p.pollId;
+	</select>
+	
+	<select id="pollCountSum" resultType="int">
+		select count(c.userId) from (select * from poll_log pl where pollId in (
+			select pollId from poll where postId = (select postId from poll where pollId = #{param1})) group by userId) as c;
+	</select>
+	
+	<update id="setHotPost">
+		update post set hotPost = 'Y'
+			where postId = (select postId from poll where pollId = #{param1});
+	</update>
+	
+</mapper>

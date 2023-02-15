@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.UserReportDAO">
+ 
+<select id="reportPostForm" resultType="kr.co.withkbo.dto.UserReportDTO" >
+	select userId, subject from post where postId=#{param1}
+</select>
+
+
+
+<select id="reportCommentForm" resultType="kr.co.withkbo.dto.UserReportDTO">
+	select userId, comContent
+	from comment
+	where commentId=#{param1} 
+</select>
+
+
+
+<insert id="report" 
+	useGeneratedKeys="true" 
+ 	keyColumn="reportId"
+ 	keyProperty="reportId"
+ 	parameterType="kr.co.withkbo.dto.UserReportDTO">
+	
+	INSERT into report(userId, reportType, id, reason)
+	VALUES(#{userId},#{reportType},#{id},#{reason})
+</insert>
+
+
+
+
+
+
+
+</mapper>

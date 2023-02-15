@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.AddressDAO">
+
+<insert id="addr">
+	insert into shipping(postId,userId,name,phone,postcode,roadAddr,detailAddr,memo)
+	values(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8})
+</insert>
+
+<select id="detail" resultType="kr.co.withkbo.dto.AddressDTO" parameterType="String">
+	select *from shipping where postId = #{postId}
+</select>
+
+<select id="susBid_list" resultType="kr.co.withkbo.dto.AddressDTO">
+select a.postId, endDate, winningPoint,subject,winnerId from auction a join post p 
+	on a.postId = p.postId where a.postId = p.postId and a.winnerId = 'test' ;
+</select>
+
+<update id="update" parameterType="hashmap">
+	update shipping set
+		name = #{name}
+		, phone = #{phone}
+		, postcode = #{postcode}
+		, roadAddr = #{roadAddr}
+		, detailAddr = #{detailAddr}
+		, memo = #{memo}
+		where postId = #{postId}
+
+
+</update>
+
+<select id="shipping" resultType="kr.co.withkbo.dto.AddressDTO">
+	select * from shipping where postId = #{param1}
+</select>
+
+<select id="winnerIdChk" resultType="kr.co.withkbo.dto.AddressDTO">
+	select winnerId from auction where postId = #{param1}
+</select>
+
+
+
+</mapper>

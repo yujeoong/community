@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.Admin_reportDAO">
+
+	<select id="report_board_list" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where reportType=1 order by reportId DESC limit 10 offset #{param1}
+	</select>
+	
+	<select id="report_comment_list" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where reportType=2 order by reportId DESC limit 10 offset #{param1}
+	</select>
+	
+	<select id="report_list_total" resultType="int">
+		select count(reportId) from report where reportType=1
+	</select>
+	
+	<select id="report_comment_total" resultType="int">
+		select count(reportId) from report where reportType=2
+	</select>
+	
+	<select id="search_board_report" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where reportType=1
+			<if test="param1.equals('reportId') and !param2.isEmpty()">
+				 and reportId=#{param2}
+			</if>
+			<if test="param1.equals('reason') and !param2.isEmpty()">
+				 and reason like CONCAT('%',#{param2},'%') order by reportId DESC limit 10 offset #{param3}
+			</if>
+			<if test="param1.equals('userId') and !param2.isEmpty()">
+				 and userId=#{param2} order by reportId DESC limit 10 offset #{param3}
+			</if>
+			
+	</select>
+	
+	<select id="search_comment_report" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where reportType=2
+			<if test="param1.equals('reportId') and !param2.isEmpty()">
+				  and reportId=#{param2}
+			</if>
+			<if test="param1.equals('reason') and !param2.isEmpty()">
+				  and reason like CONCAT('%',#{param2},'%') order by reportId DESC limit 10 offset #{param3}
+			</if>
+			<if test="param1.equals('userId') and !param2.isEmpty()">
+				  and userId=#{param2} order by reportId DESC limit 10 offset #{param3}
+			</if>
+	</select>
+	
+	<select id="search_board_report_total" resultType="int">
+		select count(reportId) from report where reportType=1
+			<if test="param1.equals('reportId') and !param2.isEmpty()">
+				 and reportId=#{param2}
+			</if>
+			<if test="param1.equals('reason') and !param2.isEmpty()">
+				 and reason like CONCAT('%',#{param2},'%') 
+			</if>
+			<if test="param1.equals('userId') and !param2.isEmpty()">
+				 and userId=#{param2} 
+			</if>
+		
+	</select>
+	
+	<select id="search_comment_report_total" resultType="int">
+		select count(reportId) from report where reportType=2
+			<if test="param1.equals('reportId') and !param2.isEmpty()">
+				  and reportId=#{param2}
+			</if>
+			<if test="param1.equals('reason') and !param2.isEmpty()">
+				  and reason like CONCAT('%',#{param2},'%') 
+			</if>
+			<if test="param1.equals('userId') and !param2.isEmpty()">
+				  and userId=#{param2}
+			</if>
+	</select>
+
+	<select id="report_chk" resultType="kr.co.withkbo.dto.Admin_reportDTO">
+		select * from report where reportId=#{param1}
+	</select>
+	
+	<insert id="report_process">
+		insert into report_process(reportId,userId,pResult,pReason)
+			values(#{param1},#{param2},#{param3},#{param4})
+	</insert>
+	
+	<update id="report_status">
+		update report set status='Y' where reportId=#{param1}		
+	</update>
+	
+	<update id="report_user_plus">
+	<if test="param2 == '1'.toString()">
+		update user u,post p2 set sanctionNo = sanctionNo + 1,p2.blind ='B' where u.userId =
+			(select p.userId from post p inner join report r2 on r2.id = p.postId 
+				where r2.reportId=#{param1} and r2.reportType =#{param2}) and
+					p2.postId = (select p3.postId  from post p3 inner join report r3  
+						on r3.id =p3.postId where r3.reportId = #{param1} and r3.reportType =#{param2})
+	</if>
+	<if test="param2 == '2'.toString()">
+		update user u,comment co1 set sanctionNo = sanctionNo + 1,co1.blind ='B' where u.userId =
+			(select c.userId from comment c inner join report r2 on r2.id = c.commentId 
+				where r2.reportId=#{param1} and r2.reportType =#{param2}) and 
+					co1.commentId =(select co2.commentId  from comment co2 inner join report r3 
+					 on r3.id=co2.commentId where r3.reportId =#{param1} and r3.reportType=#{param2})
+					 
+					 
+	</if>
+	</update>
+	
+	<select id="reportChk" resultType="string">
+		select r1.pResult  from report_process r1 inner join report r on 
+			r.reportId =r1.reportId and r.reportType =#{param1} where r.id 
+				=(select r2.id  from report r2 where r2.reportId=#{param2}); 
+	</select>
+	
+	<insert id="admin_auto_report" parameterType="kr.co.withkbo.dto.Admin_reportDTO">
+		insert into report(userId,reportType,id,reason) values(
+			#{userId},#{reportType},#{id},'관리자 직접처리'
+		)
+		<selectKey keyProperty="reportId" resultType="int"  order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<select id="pause_user_search" resultType="kr.co.withkbo.dto.AdminDTO">
+		<if test="param2 == '1'.toString()">
+		select u.userId ,u.sanctionNo  from `user` u where userId =
+			(select p.userId from post p inner join report r on r.id=p.postId 
+				where r.reportId=#{param1} and r.reportType =#{param2}); 
+		</if>
+		<if test="param2 == '2'.toString()">	
+		select userId ,sanctionNo  from `user` u where userId = 
+			(select c2.userId from comment c2 inner join report r2 on r2.id =c2.commentId 
+				where  r2.reportId =#{param1} and r2.reportType =#{param2});	
+		</if>
+	</select>
+	
+	<update id="pause_user_change" >
+		update user_status set status=2, updateDate =date_add(now(),interval 7 day)  where userId =#{param1}
+	</update>	
+</mapper>

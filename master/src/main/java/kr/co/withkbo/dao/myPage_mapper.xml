@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.MyPageDAO">
+	<select id="list" resultType="kr.co.withkbo.dto.MyPageDTO"
+		parameterType="String">
+		SELECT userId, password, nickname, email, (SELECT SUM(point) FROM point_event AS p WHERE p.userId = #{userId}) AS point FROM user WHERE userId = #{userId}
+	</select>
+	
+	<select id="myPageUF" resultType="String">
+		SELECT userId FROM user WHERE userId = #{param1} AND password = #{param2}
+	</select>
+	
+	<select id ="upForm" resultType="kr.co.withkbo.dto.MyPageDTO"
+		parameterType="String">
+		SELECT userId, password, nickname, email, nickUpdateDate, (SELECT SUM(point) FROM point_event AS p WHERE p.userId = #{userId}) AS point FROM user WHERE userId = #{userId}
+	</select>
+	
+	<update id = "pwUpdate" parameterType="String">
+		UPDATE user SET password = #{param2} WHERE userId = #{param1}
+	</update>
+	
+	<select id="nicChk" resultType="String">
+		SELECT nickname FROM user WHERE nickname = #{param1}
+	</select>
+
+	<update id ="nameUpt" parameterType="String">
+		UPDATE user SET nickname = #{param1},
+			nickUpdateDate = now()
+		 WHERE userId = #{param2}
+	</update>
+	
+	<select id="prenick" resultType ="String" parameterType="String">
+		SELECT nickname FROM user WHERE userId = #{userId}
+	</select>
+
+
+<!-- 	<select id="change" resultType="int" parameterType="String"> -->
+<!-- 		SELECT (nickUpdateDate > date_add(now(), interval -1 month)) AS nickUpdateDate FROM user WHERE userId = #{userId} -->
+<!-- 	</select> -->
+	
+	
+<!-- 	<select id="myPost" resultType="kr.co.withkbo.dto.MyPostDTO"  parameterType="String"> -->
+<!-- 		SELECT p.postId, c.categoryName, p.subject, p.regDate FROM post p, category c -->
+<!-- 	</select> -->
+	
+	
+<!-- 	원본 <select id="myList" resultType="kr.co.withkbo.dto.MyPostDTO"> -->
+<!-- select row_number() over(order by postId) as RowNum, p.postId, c.categoryName, p.subject, p.regDate  -->
+<!-- from post p join category c on  p.categoryId =c.categoryId where userId = #{userId} order by RowNum DESC limit 10 offset #{param1}; -->
+<!-- 	</select> -->
+	
+	<select id="myPostList" resultType="kr.co.withkbo.dto.MyPostDTO">
+		SELECT p.postId, c.categoryName, p.subject, p.regDate 
+		FROM post p JOIN category c ON  p.categoryId =c.categoryId WHERE userId = #{param2} ORDER BY p.regDate DESC limit 10 offset #{param1};
+	</select>
+	
+	
+	<select id="myPost_totalCount" resultType="int" parameterType="String">
+		SELECT COUNT(postId) from post where userId= #{userId}
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM post WHERE postId = #{param1}
+		
+	</delete>
+<!-- 	<select id="board_total" resultType="int"> -->
+<!-- 		select count(postId) from post; -->
+<!-- 	</select>	 -->
+	
+<!-- 	<select id="board_user" resultType="kr.co.withkbo.dto.MyPostDTO"> -->
+<!-- 		select row_number() over(order by postId) as RowNum, c.categoryName, p.subject, p.regDate from post p, category c where userId = #{param1} order by RowNum desc limit 20 offset #{param2}; -->
+<!-- 	</select> -->
+
+	<select id="myCommentList" resultType="kr.co.withkbo.dto.MyPostDTO">
+		SELECT p.postId, c2.categoryName, c.comContent, p.subject, c.regDate FROM comment c JOIN post p ON c.postId = p.postId JOIN category c2 ON p.categoryId = c2.categoryId
+		WHERE c.userId = #{param2} ORDER BY c.regDate DESC limit 10 offset #{param1}
+	</select>
+	
+	<select id="myComment_totalCount" resultType="int" parameterType="String">
+		SELECT COUNT(commentId) from comment where userId= #{userId}
+	</select>
+	
+	<update id ="quitFin" parameterType="String">
+		UPDATE user_status SET status = '3' WHERE userId = #{param1}
+	</update>
+	
+	<select id="myPoint" resultType="kr.co.withkbo.dto.MyPointDTO">
+		SELECT pe.pointId, pe.createDate, pe.comment, pe.point, u.nickname FROM point_event pe JOIN `user` u  ON u.userId = pe.userId WHERE u.userId = #{param2} ORDER BY pe.pointId DESC limit 10 offset #{param1}
+
+	</select>
+	
+	<select id="myPoint_totalCount" resultType="int">
+		SELECT COUNT(pointId) from point_event where userId= #{param1}
+	</select>
+	
+	<select id="myPrePoint" resultType="kr.co.withkbo.dto.MyPageDTO"
+		parameterType="String">
+		SELECT nickname, (SELECT SUM(point) FROM point_event AS p WHERE p.userId = #{userId}) AS point FROM user WHERE userId = #{userId}
+	</select>
+	
+	
+	<select id="myAuctionList_totalCount" resultType="int">
+		SELECT COUNT(postId) from auction where winnerId= #{param1}
+	</select>
+	
+	<select id="myAuctionList" resultType="kr.co.withkbo.dto.MyAuctionDTO">
+		select a.postId, p.subject, p.regDate , a.endDate, a.winningPoint from auction a join post p on a.postId =p.postId where a.winnerId = #{param2} order by a.postId desc limit 10 offset #{param1}
+		
+	</select>
+	
+	
+</mapper>

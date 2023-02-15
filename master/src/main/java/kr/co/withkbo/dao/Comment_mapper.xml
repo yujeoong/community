@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.withkbo.dao.CommentDAO">
+
+<insert id="comtSubmit">
+	INSERT INTO comment(comContent,userId,postId)
+			values(#{param1},#{param2},#{param3})
+</insert>
+
+<select id="reTotalCount" resultType="int">
+	SELECT COUNT(commentId) FROM comment WHERE postId=#{param1};
+</select>
+
+
+<select id="commentListCall" resultType="kr.co.withkbo.dto.CommentDTO">
+	SELECT c.userId, c.comContent, c.regDate, c.commentId, c.blind, u.nickname
+		FROM comment c JOIN post p ON c.postId = p.postId JOIN user u on c.userId=u.userId WHERE c.postId = #{param1} 
+			ORDER BY c.regDate DESC limit 10 offset #{param2};
+</select>
+
+<update id="comtUpdate">
+	UPDATE comment SET comContent = #{param2} WHERE commentId = #{param1}
+</update>
+
+<delete id="comDelete">
+	DELETE FROM comment WHERE commentId = #{param1}
+</delete>
+</mapper>

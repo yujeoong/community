@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+<mapper namespace="kr.co.withkbo.dao.MainPostDAO">
+
+	<select id="list_fa" resultType="kr.co.withkbo.dto.MainPostDTO">
+	
+	select subject,postId from post where categoryId = 4 and regDate between 
+		date_add(now(), interval -1 day) and now() 
+		order by views desc limit 5
+	</select>
+	
+	<select id="list_in" resultType="kr.co.withkbo.dto.MainPostDTO">
+		select subject,postId from post where categoryId = 6 order by regDate desc limit 5		
+	</select>
+	
+	<select id="list_po" resultType="kr.co.withkbo.dto.MainPostDTO">
+		select subject,p.postId,newFileName from post p left join file f on p.postId = f.postId where categoryId = 5 order by postId desc limit 1 
+	</select>
+	
+	<select id="MainPostDet" resultType="kr.co.withkbo.dto.MainPostDTO"
+	parameterType="String">
+		select * from post where postId = #{param1}
+	</select>
+
+	
+</mapper>

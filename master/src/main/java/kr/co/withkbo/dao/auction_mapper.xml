@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.AuctionDAO">
+	
+	<select id="detail" resultType="kr.co.withkbo.dto.AuctionDTO">
+		SELECT p.postId, userId, subject, regDate, content, views, blind, endDate, startingPoint, f.newFileName, winnerId, winningPoint
+			FROM post p
+		  	JOIN auction a ON p.postId = a.postId
+		  	LEFT JOIN file f ON p.postId = f.postId
+		  	WHERE p.postId=#{param1};
+	</select>
+	
+	<insert id="bidding">
+		INSERT INTO bid_log(postId, userId, bidPoint)
+			VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<select id="bidLog" resultType="kr.co.withkbo.dto.BidLogDTO">
+		SELECT userId, bidPoint, bidDate FROM bid_log WHERE postId=#{param1} ORDER BY bidPoint DESC
+	</select>
+	
+	<!-- 경매가 끝났는지 확인 -->
+	<select id="aucEndChk" resultType="int">
+		<![CDATA[ select a.endDate < now() from auction a where postId =#{param1}]]> ;
+	</select>
+	
+	<!-- 경매 낙찰자가 이미 입력되어있는지 확인 -->
+	<select id="aucConfirmChk" resultType="int">
+		select exists (select * from auction a where postId = #{param1} and winnerId is null and winningPoint is null);
+	</select>
+	
+	<!-- 해당 경매의 bidLog 중 가장 최근의 userId와 bidPoint가 auction의 winnerId, winnerPoint에 들어감 -->
+	<update id="aucConfirm">
+		update auction a set 
+			a.winnerId = (select bl.userId from bid_log bl where bl.postId = #{param1} order by bidId desc limit 1), 
+			a.winningPoint = (select bl.bidPoint from bid_log bl where bl.postId = #{param1} order by bidId desc limit 1)
+		where a.postId = #{param1};
+	</update>
+	
+</mapper>

@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+#AuSub{
+	text-align: center;
+}
+
+#AuWr{
+	width: 700px;
+	height : 500px;
+	border : 2px solid #737373;
+	margin : 0 auto;
+	
+	border-radius: 10px;
+	padding : 30px 50px;
+	box-sizing: border-box;
+	list-style: none;
+}
+
+#AuUl{
+	list-style: none;
+	
+}
+
+#AuWr label{
+	display: inline-block;
+	width: 230px;
+	margin-left: 50px;
+	
+}
+
+
+#AuWr li{
+		position: relative;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+}
+
+
+#AuWr input[type=text]{
+	border: 1px solid #737373;
+	border-radius: 5px;
+	height: 35px;
+	width: 200px;
+}
+
+#AuWr input[type=button]{
+	width: 70px;
+	height: 30px;
+	border-radius: 5px;
+	border: 1px solid black;
+	font-size: 13px;
+
+}
+
+#AuWr input[type=submit]{
+	width: 70px;
+	height: 30px;
+	border-radius: 5px;
+	border: 1px solid black;
+	font-size: 13px;
+	margin-left: 250px;
+
+}

@@ -1,0 +1,122 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+/* html{font-size: 20px;} */
+/* body{font-size: 1rem;} */
+
+header{ 
+	background: white;	
+	border-bottom: 3px solid #000;
+/* 	height: 9rem; */
+	height: 180px;
+	
+}
+
+header > div{
+/* 	width: 57rem;  */
+	width: 1140px;
+	margin: 0 auto ;	
+	position: relative;
+	
+ }
+
+header > div:after{
+	content: ""; display: block; clear: both;}
+
+
+header > div h1{
+	float: left;
+/* 	padding: 1.1rem 0 1.2rem; */
+	padding: 22px 0 24px;
+}
+
+header > div> #nav{
+	float: right;
+/* 	padding-top: 4rem; */
+	padding-top: 80px;
+/* 	padding: 2.65rem 0 0 0 ; 	 */
+}
+
+header > div> #nav > ul > li{
+	float: left;
+	list-style: none;	
+}
+
+header > div> #nav > ul > li > a{
+	display: block;
+/* 	padding: .75rem 1.25rem 0; */
+	padding: 15px 25px 0;
+/* 	height: 2.6rem; */
+	height: 52px;
+/* 	font-size: .7rem;  */
+	font-size: 14px;
+	color: #333; 
+	line-height: 100%;
+	text-decoration: none;
+}
+header > div .spot{
+	position: absolute; right: 0; top: 0;}
+
+header > div h1 > a > img{
+	width: 200px;
+	margin-right: 0px;
+}
+
+
+header > div h2.hide{color: transparent;}
+
+
+header > div > #nav > ul{
+/* 	margin-top:5rem; */
+/* 	margin-right: 10rem; */
+	margin-right: 200px;
+	position: relative;
+	
+}
+
+header > div > ul{
+	margin-right: 200px;
+	
+}
+
+header > div .spot li {
+	float: left;
+/* 	font-size: .7rem; */
+	font-size: 14px;
+	list-style: none;
+	position: relative;
+/* 	margin-top: 1rem; */
+	margin-top: 20px;
+	
+}
+
+header > div .spot li~ li a:after{ 
+	content: ""; 
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	width: 1px; 
+/* 	height: .6rem;  */
+	height: 12px;
+	background: #e5e5e5;
+	transform :translateY (-25%);
+	}
+
+header > div .spot li a{
+	text-decoration: none;
+/* 	font-size: .7rem; */
+	font-size: 14px; 
+	
+	color: #333;
+/* 	padding: 0 .75rem ; */
+	padding: 0 15px;
+	
+	height: 100%;
+	
+	
+	}
+	
+* {margin: 0; padding: 0; box-sizing: border-box;
+	
+}

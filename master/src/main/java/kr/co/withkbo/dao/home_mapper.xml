@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.HomeDAO">
+
+<select id="pollList" resultType="hashmap">
+	select *
+	from post p join poll pl
+	on p.postId =pl.postId where p.postId =(select p.postId
+	from post p join poll pl
+	on p.postId =pl.postId where pl.endDate > now() and p.blind='N'
+	group by p.postId order by categoryId, postId LIMIT 1 OFFSET #{param1});
+</select>
+
+</mapper>

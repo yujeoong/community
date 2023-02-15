@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.DetailPageDAO">
+	<select id="dpage" resultType="kr.co.withkbo.dto.BoardDTO">
+		select p.postId, c.categoryId, c.categoryName, p.userId, subject, p.regDate, content, views, hotPost, blind, newFileName, u.nickname
+			from post p join category c on c.categoryId = p.categoryId left join file f on p.postId = f.postId join `user` u on p.userId =u.userId
+				where p.postId =#{param1} order by fileId desc limit 1;
+	</select>
+	
+	<select id="dpoll" resultType="kr.co.withkbo.dto.PollDTO">
+		select pollId, selection, endDate from poll where postId=#{param1};
+	</select>
+	
+	<select id="matchResultChk" resultType="int">
+		select exists (select mp.pollId from match_poll mp where mp.pollId in(select p.pollId from poll p where p.postId=#{param1}));
+	</select>
+	
+	<insert id="matchResult">
+		insert into match_poll(pollId, matchResult) values(#{param1}, 'Y')
+	</insert>
+	
+	<select id="matchResultPoint" statementType="CALLABLE">
+		{
+			call match_result_add(#{param1})
+		}
+	</select>
+	
+	<update id="upHit">
+		UPDATE post SET views=views+1 WHERE postId=#{param1}
+	</update>
+
+</mapper>

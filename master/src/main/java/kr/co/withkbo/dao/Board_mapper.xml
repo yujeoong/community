@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.withkbo.dao.BoardDAO">
+
+
+<insert id="write" 
+ 	useGeneratedKeys="true" 
+ 	keyColumn="postId"
+ 	keyProperty="postId"
+ 	parameterType="kr.co.withkbo.dto.BoardDTO">
+ 	INSERT INTO post(userId, subject, content, categoryId)
+ 		VALUES(#{userId}, #{subject}, #{content}, #{categoryId})
+ </insert>
+ 
+ <insert id="write_p" parameterType="kr.co.withkbo.dto.PollDTO">
+  INSERT INTO poll(postId, selection, endDate)
+ 		VALUES(#{postId},#{selection}, #{endDate})
+ </insert>
+ 
+  <insert id="write_auc" parameterType="kr.co.withkbo.dto.AuctionDTO">
+  INSERT INTO auction(postId, endDate, startingPoint)
+  		VALUES(#{postId}, #{endDate}, #{startingPoint})
+  </insert>
+ 
+  <insert id="firstBid">
+  INSERT INTO bid_log(postId, userId, bidPoint)
+ 		VALUES(#{param1}, '-', 0)
+  </insert>
+
+
+<!--      파일 사진 업로드       -->
+<insert id="fileWrite">
+	INSERT INTO file(postId, oriFileName, newFileName)
+	VALUES(#{param1}, #{param2}, #{param3})
+	ON DUPLICATE KEY UPDATE oriFileName=#{param2}, newFileName=#{param3};
+</insert>
+
+<select id="fileList" parameterType="String" resultType="kr.co.withkbo.dto.BoardDTO">
+	SELECT * FROM file WHERE postId = #{postID}
+	ORDER BY fileId
+</select>
+
+
+
+
+<!--     글 수정      -->
+ <update id="update" parameterType="hashmap">
+ 	UPDATE post SET 
+ 		subject = #{subject}
+ 		,content = #{content}
+ 	WHERE postId = #{postId}
+ </update>
+
+<update id="update_p" parameterType="kr.co.withkbo.dto.PollDTO">
+  UPDATE poll SET
+  		selection = #{selection}
+  		,endDate = #{endDate}
+  WHERE pollId =(select pollId from poll where postId = #{postId} order by pollId limit 1 offset #{offset});
+ </update>
+ 
+  <update id="update_auc" parameterType="hashmap">
+  UPDATE auction SET
+  		endDate = #{endDate}
+  		,startingPoint = #{startingPoint}
+   WHERE postId = #{postId}
+ </update>
+
+<select id="updateForm" resultType="kr.co.withkbo.dto.BoardDTO" parameterType="String">
+	SELECT * FROM post where postId = #{postId}
+</select>
+
+
+
+
+<!--   글  삭제     -->
+ <delete id="delete" parameterType="String">
+ 	DELETE FROM post WHERE postId=#{postId}
+ </delete>
+
+
+
+
+
+<!-- 게시판 신고 -->
+
+<insert id="reportForm"
+ 	useGeneratedKeys="true" 
+ 	keyColumn="reportId"
+ 	keyProperty="reportId"
+ 	parameterType="kr.co.withkbo.dto.BoardDTO">
+ 	INSERT INTO post(userId, reportType, id, reason)
+ 		VALUES(#{sessionId}, #{reportType}, #{nickname}, #{content})
+ </insert>
+
+
+<!-- 게시판, 페이징처리 -->
+<select id = "list" resultType="kr.co.withkbo.dto.BoardDTO">
+	SELECT distinct p.postId, p.subject, p2.endDate, u.nickname, p.regDate, p.views
+	FROM post p, poll p2, user u, category c
+	WHERE p.postId = p2.postId AND u.userId=p.userId AND c.categoryId = p.categoryId AND p.categoryId =#{param2} AND p.blind = 'N'
+	ORDER BY postId DESC 
+	LIMIT 10 OFFSET #{param1}
+</select>
+
+<select id = "genlist" resultType="hashmap">
+	SELECT distinct p.postId, p.subject, u.nickname, p.regDate, p.views
+	FROM post p, user u
+	WHERE u.userId=p.userId AND p.categoryId =#{param2} AND p.blind = 'N'
+	ORDER BY postId DESC 
+	LIMIT 10 OFFSET #{param1}
+</select>
+
+<select id = "auclist" resultType="hashmap">
+	SELECT distinct p.postId, p.subject, u.nickname, p.regDate, p.views
+	FROM post p, user u
+	WHERE u.userId=p.userId AND p.categoryId =#{param2} AND p.blind = 'N'
+	ORDER BY postId DESC 
+	LIMIT 10 OFFSET #{param1}
+</select>
+
+<select id="totalCount" resultType="int">
+	SELECT COUNT(postId) FROM post p
+	where p.categoryId = #{param1} and blind = 'N'
+</select>
+
+
+<!-- 게시판 검색 -->
+<select id="search_post_poll" resultType="kr.co.withkbo.dto.BoardDTO">
+SELECT distinct p.postId, p.subject, p2.endDate, u.nickname, p.regDate, p.views
+FROM comment c2, post p join poll p2 on p.postId = p2.postId join category c on c.categoryId = p.categoryId 
+join user u on u.userId = p.userId
+where p.categoryId = #{param3}
+		<if test="param1 !=null and param1 == 1">
+		and subject LIKE CONCAT ('%',#{param2},'%')
+		OR content LIKE CONCAT ('%',#{param2},'%')
+		</if>	
+		<if test="param1 !=null and param1 == 2">
+		and subject LIKE CONCAT ('%',#{param2},'%')
+		</if>	
+		<if test="param1 !=null and param1 == 3">
+		and content LIKE CONCAT ('%',#{param2},'%')
+		</if>	
+		<if test="param1 !=null and param1 == 4">
+		and nickname LIKE CONCAT ('%',#{param2},'%')
+		</if>	
+		<if test="param1 !=null and param1 == 5">
+		and comContent LIKE CONCAT('%', #{param2},'%') and c2.postId = p.postId
+		</if>
+		order by postId DESC 
+</select>
+
+<select id="search_post_others" resultType="kr.co.withkbo.dto.BoardDTO">
+SELECT distinct p.postId, p.subject, u.nickname, p.regDate, p.views
+FROM comment c2, post p join user u on u.userId = p.userId
+WHERE p.categoryId = #{param3}
+
+		<if test="param1 !=null and param1 == 1">
+		AND (subject LIKE CONCAT('%', #{param2}, '%')
+		OR content LIKE CONCAT('%', #{param2}, '%'))
+		</if>	
+		<if test="param1 !=null and param1 == 2">
+		AND subject LIKE CONCAT('%', #{param2}, '%')
+		</if>	
+		<if test="param1 !=null and param1 == 3">
+		AND content LIKE CONCAT('%', #{param2}, '%')
+		</if>	
+		<if test="param1 !=null and param1 == 4">
+		AND nickname LIKE CONCAT('%', #{param2}, '%')
+		</if>	
+		<if test="param1 !=null and param1 == 5">
+		AND comment.content LIKE CONCAT('%', #{param2}, '%') and c2.postId = p.postId
+		</if>
+		order by postId DESC 
+</select>
+
+
+
+
+</mapper>
+
+
+
+

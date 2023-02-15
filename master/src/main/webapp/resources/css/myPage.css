@@ -1,0 +1,253 @@
+ @charset "UTF-8"; 
+
+th, tr, td {
+	border : 1px solid #ddd;
+	border-left : none;
+	border-right : none;
+	border-collapse: collapse;
+	padding: 10px 10px;
+}
+
+
+button{
+	color: white;
+	background-color: rgb(0, 74, 173);
+}
+
+.a1{
+	font-weight: bold;
+	color: white;
+	background-color: rgb(0, 74, 173);	
+}
+a {
+	text-decoration: none;
+	color : black;	
+}
+ a:hover {
+ 	text-decoration: none;
+ 	color : rgb(0, 74, 173);
+ }
+span.a{
+	margin-right: 150px;
+}
+/* .m1{ */
+/* 	margin-left: 50px; */
+/* } */
+/* Style the tab */
+/* .menu1{ */
+/* 	float : left; */
+/* 	margin-left: 30px; */
+/* } */
+/* .menu { */
+/* 	font-size : larger; */
+/* 	background-color: #white; */
+/* 	margin-left : 50px; */
+/* 	margin-right : 50px; */
+/* } */
+
+
+
+.mypage{
+	width:500px;
+    height:300px;
+    margin:0 0 0 300px;
+}
+.quit{
+	width:500px;
+    height:300px;
+	margin:0 0 0 300px;
+}
+.mpost{
+	float: left;
+	width:700px;
+/*     margin:0 auto; */
+}
+
+.mpost1{
+	margin-top : 30px;
+	width: 100px;
+	text-align: center;
+	
+}
+.table1{
+	width: 700px;
+	text-align: center;
+}
+.table2{
+	width: 700px;
+}
+.td1{
+	text-align: center;
+	font-weight: bold;
+	color: white;
+	background-color: rgb(0, 74, 173);	
+}
+
+.a2{
+	margin:0 auto;
+}
+.mpost{
+	width: 600px;
+	margin-right : 200px;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+th{
+	text-align: center;
+}
+
+
+.mpost1 {
+	border-collapse: collapse;
+	border-top: 3px solid rgb(0, 74, 173);
+	border-left : none;
+	border-right : none;
+}  
+.mpost{
+	border-left : none;
+	border-right : none;
+}
+.mpost1 th {
+  color: white;
+  background: rgb(0, 74, 173);
+}
+.mpost1 th, .mpost1 td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+.mpost1 th:first-child, .mpost1 td:first-child {
+  border-left: 0;
+}
+.mpost1 th:last-child, .mpost1 td:last-child {
+  border-right: 0;
+}
+
+
+.a2{
+	margin-top : 30px;
+	margin-left : 300px;
+	width: 100px;
+	height: 35px;
+	border-radius: 5px;
+	font-size: 10px;
+	border: 1px solid black;
+}
+
+#a3{
+	float:left;
+	margin-bottom: 50px;
+}
+
+.a4{
+	margin-top : 20px;
+	margin-left : 1050px;
+	margin-bottom : 30px;
+	width: 100px;
+	height: 35px;
+	border-radius: 5px;
+	font-size: 10px;
+	border: 1px solid black;
+}
+
+.a5{
+	width: 100px;
+	height: 35px;
+	border-radius: 5px;
+	font-size: 10px;
+	border: 1px solid black;
+}
+
+.a6{
+	width: 100px;
+	height: 35px;
+	border-radius: 5px;
+	font-size: 10px;
+	border: 1px solid black;
+	background-color: #d4d4d4;
+	color: black;
+}
+
+
+.point{
+	text-align: center;
+	border: 1px solid;
+	padding : 10px 120px;
+}
+
+
+button{
+   color: white;
+   background-color: rgb(0, 74, 173);
+}
+a {
+   text-decoration: none;
+   color : black;
+}
+span.a{
+   margin-right: 150px;
+}
+/* Style the tab */
+.menu1{
+   float : left;
+   margin-left: 30px;
+}
+.menu {
+   background-color: #white;
+}
+
+.point{
+	margin-left : 500px;
+	width: 700px;
+	
+}
+#point1{
+	text-align: center;
+}
+
+#nickname{
+	width: 300px;
+}
+
+#quitFin{
+	margin-top : 30px;
+	margin-left : 300px;
+	width: 100px;
+	height: 35px;
+	border-radius: 5px;
+	font-size: 10px;
+	border: 1px solid black;
+}
+/* /* 메뉴 바 안에 */  */
+/* .tab li { */
+/*   display: block; */
+/*   background-color: inherit; */
+/*   color: black; */
+/*   padding: 22px 16px; */
+/*   width: 100%; */
+/*   border: none; */
+/*   outline: none; */
+/*   text-align: left; */
+/*   cursor: pointer; */
+/*   transition: 0.3s; */
+/*   font-size: 17px; */
+/* } */
+
+/* /* 호버 색깔 */ */
+/* .menu span :hover { */
+/*   background-color: rgb(246, 246, 246); */
+/* } */
+/* .menu span{ */
+/*    font-size: 120%; */
+/*    padding: 20px; */
+/* } */
+
+/* /* Style the tab content */ */
+/* .tabcontent { */
+/*   float: left; */
+/*   padding: 0px 12px; */
+/*   border: 1px solid #ccc; */
+/*   width: 70%; */
+/*   border-left: none; */
+/*   height: 300px; */
+/* } */

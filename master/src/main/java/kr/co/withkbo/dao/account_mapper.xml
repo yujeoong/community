@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+<mapper namespace="kr.co.withkbo.dao.AccountDAO">
+
+	<select id="idfind" resultType="String">
+		select userId from user where email = #{param1}
+	</select>
+	
+	<select id="ResetPw" resultType="String">
+		select password from user where email = #{param1} and userId = #{param2}
+	</select>
+	
+	<update id="pwUpdate">
+		update user set password = #{param1} where userId = #{param2}
+	</update>
+
+
+
+
+
+
+
+
+
+</mapper>

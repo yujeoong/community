@@ -1,0 +1,7 @@
+.settings/
+.classpath
+.project
+.springBeans
+src/test/
+target/
+src/main/webapp/resources/img/head_logo.png

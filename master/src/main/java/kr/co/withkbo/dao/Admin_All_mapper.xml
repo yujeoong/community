@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="kr.co.withkbo.dao.Admin_all_listDAO">
+	<select id="all_board" resultType="kr.co.withkbo.dto.AdminPostDTO">
+		select * from post p,category c where p.categoryId =c.categoryId order by postId DESC limit 10 offset #{param1}
+	</select>
+	
+	<select id="all_board_total" resultType="int">
+		select count(p.postId) from post p,category c where p.categoryId =c.categoryId
+	</select>
+	
+	<select id="all_comment" resultType="kr.co.withkbo.dto.AdminCommentDTO">
+		select * from comment order by commentId DESC limit 10 offset #{param1}
+	</select>
+	
+	<select id="all_comment_total" resultType="int">
+		select count(commentId) from comment
+	</select>
+	
+	<select id="all_board_search" resultType="kr.co.withkbo.dto.AdminPostDTO">
+		select * from post p,category c where p.categoryId =c.categoryId
+		<if test="param1 == 1 and !param2.isEmpty()">
+			 and p.postId=#{param2}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			and p.subject like CONCAT('%',#{param2},'%') order by p.postId DESC limit 10 offset #{param3}
+		</if>
+		<if test="param1 == 3 and !param2.isEmpty()">
+			and p.userId=#{param2} order by p.postId DESC limit 10 offset #{param3}
+		</if>
+	</select>
+	
+	<select id="all_board_search_total" resultType="int">
+		select count(p.postId) from post p,category c where p.categoryId =c.categoryId
+		<if test="param1 == 1 and !param2.isEmpty()">
+			 and postId=#{param2}
+		</if>
+		<if test="param1 == 2 and !param2.isEmpty()">
+			and subject like CONCAT('%',#{param2},'%') 
+		</if>
+		<if test="param1 == 3 and !param2.isEmpty()">
+			and userId=#{param2} 
+		</if>
+	
+	</select>
+	
+	<select id="all_comment_search" resultType="kr.co.withkbo.dto.AdminCommentDTO">
+		 select * from comment 
+		 <if test="param1 == 1 and !param2.isEmpty()">
+		 	where commentId=#{param2}
+		 </if>
+		 <if test="param1 == 2 and !param2.isEmpty()">
+		 	where postId=#{param2}
+		 </if>
+		 <if test="param1 == 3 and !param2.isEmpty()">
+		 	where comContent like CONCAT('%',#{param2},'%') order by commentId DESC limit 10 offset #{param3}							
+		 </if>
+		 <if test="param1 == 4 and !param2.isEmpty()">
+		 	where userId=#{param2} order by commentId DESC limit 10 offset #{param3}
+		 </if>
+		 
+	</select>
+	
+	<select id="all_comment_search_total" resultType="int">
+		select count(commentId) from comment 
+		 <if test="param1 == 1 and !param2.isEmpty()">
+		 	where commentId=#{param2}
+		 </if>
+		 <if test="param1 == 2 and !param2.isEmpty()">
+		 	where postId=#{param2}
+		 </if>
+		 <if test="param1 == 3 and !param2.isEmpty()">
+		 	where comContent like CONCAT('%',#{param2},'%') 
+		 </if>
+		 <if test="param1 == 4 and !param2.isEmpty()">
+		 	where userId=#{param2}
+		 </if>
+	</select>
+	
+	<select id="board_report_chk" resultType="int">
+		select exists (select reportId from report r where id=#{param1} and reportType=#{param2}) as success;
+	</select>
+	
+	<select id="board_reportId_search" resultType="string">
+	<if test="param2 == 1">
+		select reportId from report where id=#{param1} and reportType=1;
+	</if>
+	<if test="param2 == 2">
+		select reportId from report where id=#{param1} and reportType=2;
+	</if>
+	</select>
+	
+<!-- 	<select id=""></select> -->
+	
+</mapper>
