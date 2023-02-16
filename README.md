@@ -61,3 +61,35 @@ with kbo는 KBO league를 주제로 한 커뮤니티 서비스입니다.
     - 관리자는 접수된 신고 리스트를 확인할 수 있습니다. 
     - 관리자가 신고 처리시 관리자 아이디, 처리 결과, 사유가 업데이트 됩니다.  
 </br>
+
+
+## ✔ 개발 환경 및 라이브러리 
+---
+- Java 6
+- JavaScript
+- jQuery 3.6
+- Spring Framework 4.3.14
+- Mybatis 3.4.6
+- MariaDB
+- MySQL
+- Docker
+- DBeaver
+- Maven
+- STS IDE
+
+
+</br>
+## ✔ 협업 도구 
+---
+- Github, Sourcetree
+  - 코드의 버전을 관리
+  - 이슈 발행, 해결을 위한 토론
+- 회의
+  - 매일 오후 5시 WBS 업데이트 후 목표 달성량에 관해 브리핑
+  - 각자 위치에서 건네야 할 말이 생기면 팀원의 위치로 이동하여 전달
+- Google Docs
+  - 회의가 있을때마다 회의록을 기록하여 보관
+  - 요구사항 정의서 
+  - UI 설계서
+  - WBS 관리
+  
