@@ -77,8 +77,6 @@ with kbo는 KBO league를 주제로 한 커뮤니티 서비스입니다.
 - Maven
 - STS IDE
 
-
-</br>
 ## ✔ 협업 도구 
 ---
 - Github, Sourcetree
