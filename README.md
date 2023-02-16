@@ -62,6 +62,10 @@ with kbo는 KBO league를 주제로 한 커뮤니티 서비스입니다.
     - 관리자가 신고 처리시 관리자 아이디, 처리 결과, 사유가 업데이트 됩니다.  
 </br>
 
+## ✔ ERD 설계  
+---
+![ERD](https://user-images.githubusercontent.com/124366993/219279949-9fba9986-5ce8-4922-975a-ec61d39165d6.png)
+
 
 ## ✔ 개발 환경 및 라이브러리 
 ---
