@@ -75,7 +75,6 @@ with kbo는 KBO league를 주제로 한 커뮤니티 서비스입니다.
 - Spring Framework 4.3.14
 - Mybatis 3.4.6
 - MariaDB
-- MySQL
 - Docker
 - DBeaver
 - Maven
